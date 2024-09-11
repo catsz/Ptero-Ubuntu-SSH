@@ -17,7 +17,7 @@ RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so
 ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile
 
-RUN echo -e "port=1300" >> /etc/ssh/sshd_config
+RUN echo "port=1300" >> /etc/ssh/sshd_config && echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config
 
 RUN apt clean 
 RUN rm -rf /var/lib/apt/list/*
