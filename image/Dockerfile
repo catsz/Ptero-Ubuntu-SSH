@@ -5,9 +5,11 @@ RUN apt-get update && apt-get install -y \
                         openssl \    
                         libpng16-16 \
                         libharfbuzz-bin \
-                        iproute2 \
+                        iproute2 iputils-ping telnet iproute2 \
                         openssh-server
-RUN mkdir -p /var/run/sshd
+# Create the privilege separation directory and fix permissions
+RUN mkdir -p /run/sshd \
+    && chmod 755 /run/sshd
 RUN echo 'root:rootAdmin' | chpasswd
 RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
