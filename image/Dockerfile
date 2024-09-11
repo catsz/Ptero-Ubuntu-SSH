@@ -20,5 +20,3 @@ RUN rm -rf /var/lib/apt/list/*
 
 EXPOSE 1300
 RUN INTERNAL_IP=$(ip route get 1 | awk '{print $(NF-2);exit}') && export INTERNAL_IP
-
-CMD ["bin/bash", "/etc/init.d/ssh start"]
