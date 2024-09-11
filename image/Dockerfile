@@ -18,7 +18,6 @@ ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile
 
 RUN echo -e "port=1300" >> /etc/ssh/sshd_config
-RUN service ssh restart
 
 RUN apt clean 
 RUN rm -rf /var/lib/apt/list/*
