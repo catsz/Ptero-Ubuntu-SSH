@@ -6,14 +6,9 @@ RUN apt-get update && apt-get install -y \
                         libpng16-16 \
                         libharfbuzz-bin \
                         iproute2
+RUN apt install openssh-server
 RUN apt clean 
 RUN rm -rf /var/lib/apt/list/*
-RUN useradd -m -d /home/container container
+RUN echo "root:rootAdmin" | chpasswd
 
-USER container
-ENV USER=container HOME=/home/container
-WORKDIR /home/container
-
-COPY --chown=container:container ./../entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-CMD [ "/bin/bash", "/entrypoint.sh" ]
+RUN INTERNAL_IP=$(ip route get 1 | awk '{print $(NF-2);exit}') && export INTERNAL_IP
