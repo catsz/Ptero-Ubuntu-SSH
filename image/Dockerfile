@@ -7,9 +7,6 @@ RUN apt-get update && apt-get install -y \
                         libharfbuzz-bin \
                         iproute2 iputils-ping telnet iproute2 \
                         openssh-server
-# Create the privilege separation directory and fix permissions
-RUN mkdir -p /run/sshd \
-    && chmod 755 /run/sshd
 RUN echo 'root:rootAdmin' | chpasswd
 RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
@@ -26,3 +23,5 @@ RUN rm -rf /var/lib/apt/list/*
 
 EXPOSE 1300
 RUN INTERNAL_IP=$(ip route get 1 | awk '{print $(NF-2);exit}') && export INTERNAL_IP
+
+CMD ["bin/bash", "/etc/init.d/ssh start"]
