@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y \
                         libpng16-16 \
                         libharfbuzz-bin \
                         iproute2 \
-                        openssh-server supervisor
+                        openssh-server
 RUN mkdir -p /var/run/sshd
 RUN echo 'root:rootAdmin' | chpasswd
 RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
