@@ -8,12 +8,10 @@ RUN apt-get update && apt-get install -y \
                         iproute2 iputils-ping telnet iproute2 \
                         openssh-server
 RUN echo 'root:rootAdmin' | chpasswd
-RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+RUN sed -i 's/port=1300/PasswordAuthentication yes/PermitRootLogin yes/' /etc/ssh/sshd_config
 
 # SSH login fix. Otherwise user is kicked off after login
 RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g'
-
-RUN echo -e "\nport=1300\nPasswordAuthentication yes" >> /etc/ssh/sshd_config
 
 RUN apt clean 
 RUN rm -rf /var/lib/apt/list/*
