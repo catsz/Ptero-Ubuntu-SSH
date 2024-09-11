@@ -5,10 +5,23 @@ RUN apt-get update && apt-get install -y \
                         openssl \    
                         libpng16-16 \
                         libharfbuzz-bin \
-                        iproute2
-RUN apt install openssh-server
+                        iproute2 \
+                        openssh-server supervisor
+RUN mkdir /var/run/sshd
+RUN echo 'root:rootAdmin' | chpasswd
+RUN sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+
+# SSH login fix. Otherwise user is kicked off after login
+RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g'
+
+ENV NOTVISIBLE "in users profile"
+RUN echo "export VISIBLE=now" >> /etc/profile
+
+RUN echo -e "port=1300" >> /etc/ssh/sshd_config
+RUN service ssh restart
+
 RUN apt clean 
 RUN rm -rf /var/lib/apt/list/*
-RUN echo "root:rootAdmin" | chpasswd
 
+EXPOSE 1300
 RUN INTERNAL_IP=$(ip route get 1 | awk '{print $(NF-2);exit}') && export INTERNAL_IP
